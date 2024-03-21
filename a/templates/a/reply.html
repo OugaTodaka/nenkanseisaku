@@ -1,0 +1,25 @@
+{% extends 'a/base.html' %}
+{% block contents %}
+
+<h3 style="background-color: aqua;padding: 5px;">
+    {{ tweet.name }}のポスト<br>
+    {{ tweet.message }}
+</h3>
+
+<div>
+    <h3 style="margin:0;">
+        このポストへの返信
+    </h3>
+    <form action="rep_send/" method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="rep">Reply:<br></label>
+            <input type="text" name="rep" required>
+        </div>
+        <input type="submit" value="返信" style="margin:15px;padding:0 5px;width:20%;height:30px;background-color:aqua;"/>
+    </form>
+</div>
+
+<a href="/" style="margin:10px 0;">戻る</a>
+
+{% endblock %}

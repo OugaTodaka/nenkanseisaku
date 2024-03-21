@@ -1,0 +1,75 @@
+{% extends 'a/base.html' %}
+{% block contents %}
+
+<div style="float: left;width: 50%;height:100%;">
+    <h2 style="margin:0px;padding:10px;text-align:center; background-color:gray; color:cyan;">
+        いま起きていることを見つけよう
+    </h2>
+    {% for tweet in tweet_list %}
+    <div style="background-color: gainsboro; margin:4px 0; padding:5px;border:1px solid black;">
+        {{ tweet.name }}：{{ tweet.message }}<br>
+        <a href="{{tweet.id}}/good/" style="margin:0 3px;">いいね：{{ tweet.good }}</a>
+        <a href="{{tweet.id}}/reply">リプライ</a>
+            <div style="margin:1px;padding-left:20px;background-color:bisque;">
+            {% for reply in reply_list %}
+            {% if tweet.id == reply.tweet.id %}
+                {{reply.name}}：{{reply.rep}}<br>
+            {% endif %}
+            {% endfor %}
+            </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div style="float:left;">
+{% if user.is_authenticated %}
+<div style="background-color:aquamarine;padding:10px;margin:10px;width:auto;float:left;border:1px solid black;text-align: center;">
+<h2 style="margin:0;">
+    ポストする
+</h2>
+<form action="post/" method="POST" style="margin:0px;">
+    {% csrf_token %}
+        <label for="message">Message:</label>
+        <input type="text" name="message" required>
+    <input type="submit" value="ポスト" style="margin-top:10px;background-color:aqua;width:40%;"/>
+</form>
+</div>
+
+<div style="background-color:aquamarine;padding:10px;margin:10px;width:auto;float:left;border:1px solid black;text-align:center; ">
+    <h3>ログイン中<br>{{ user.username }}</h3>
+    <h4>ここを押して<br><a href="signout/">ログアウト</a></h4>
+</div>
+
+{% else %}
+
+<div style="background-color:aquamarine;padding:10px;margin:10px;float:left;border:1px solid black;text-align:center;width:auto;">
+    <h2 style="margin:0;">
+        新規登録
+    </h2>
+<form action="signup/" method="POST" style="margin:0px;">
+    {% csrf_token %}
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+    <input type="submit" value="新規登録" style="margin-top:10px;background-color:aqua;width:40%;"/>
+</form>
+</div>
+
+<div style="background-color:aquamarine;padding:10px;margin:10px;float:left;border:1px solid black;text-align:center;width:auto;">
+    <h2 style="margin:0;">
+        ログイン
+    </h2>
+<form action="signin/" method="POST" style="margin:0px;">
+    {% csrf_token %}
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+    <input type="submit" value="ログイン" style="margin-top:10px;background-color:aqua;width:40%;"/>
+</form>
+</div>
+{% endif %}
+</div>
+
+{% endblock %}
